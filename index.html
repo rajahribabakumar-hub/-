@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Labor Mitra - सुरक्षित मजदूर, सुरक्षित काम</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; text-align: center; margin: 0; padding: 0; }
+        .header { background: #ff9800; color: white; padding: 20px; font-size: 24px; font-weight: bold; }
+        .container { padding: 20px; }
+        .btn { background: #4CAF50; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 20px; cursor: pointer; margin: 10px; width: 80%; }
+        .btn-red { background: #f44336; }
+        .map-box { width: 90%; height: 200px; background: #ddd; margin: 20px auto; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        #user-profile { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">मजदूर मित्र (Labor Mitra)</div>
+
+    <div class="container">
+        <div id="login-section" class="card">
+            <h3>स्वागत है! आगे बढ़ने के लिए लॉगिन करें</h3>
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID" 
+                 data-callback="handleCredentialResponse">
+            </div>
+            <div class="g_id_signin" data-type="standard"></div>
+        </div>
+
+        <div id="user-profile">
+            <div class="card">
+                <img id="user-img" src="" style="border-radius: 50%; width: 80px;">
+                <h2 id="user-name">नमस्ते!</h2>
+                <p>आज आप काम पर जाना चाहते हैं?</p>
+            </div>
+
+            <div class="card">
+                <h3>बोलकर "हाँ" या "ना" कहें</h3>
+                <button class="btn" onclick="startVoice()">🎙️ काम के लिए "हाँ" बोलें</button>
+                <button class="btn btn-red" onclick="stopWork()">❌ आज छुट्टी चाहिए</button>
+                <p id="voice-status" style="color: blue; font-weight: bold;"></p>
+            </div>
+
+            <div class="card">
+                <h3>आपका रास्ता (Google Maps)</h3>
+                <div class="map-box" id="map">मैप यहाँ खुलेगा...</div>
+                <button class="btn" style="background:#2196F3;" onclick="openMaps()">नक्शा देखें</button>
+            </div>
+
+            <div class="card">
+                <h3>आधार कार्ड फोटो अपलोड करें (KYC)</h3>
+                <input type="file" accept="image/*" capture="camera">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Google Login Handle
+        function handleCredentialResponse(response) {
+            const data = parseJwt(response.credential);
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('user-profile').style.display = 'block';
+            document.getElementById('user-name').innerText = "नमस्ते, " + data.name;
+            document.getElementById('user-img').src = data.picture;
+        }
+
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            return JSON.parse(window.atob(base64));
+        }
+
+        // Voice Recording Simulation
+        function startVoice() {
+            document.getElementById('voice-status').innerText = "रिकॉर्डिंग शुरू... अपनी भाषा में बोलें";
+            setTimeout(() => {
+                alert("आपका 'हाँ' रिकॉर्ड हो गया है! मालिक को भेज दिया गया है।");
+                document.getElementById('voice-status').innerText = "";
+            }, 3000);
+        }
+
+        function stopWork() {
+            alert("आज आपकी छुट्टी दर्ज कर ली गई है। कल मिलते हैं!");
+        }
+
+        // Open Google Maps
+        function openMaps() {
+            window.open("https://www.google.com/maps", "_blank");
+        }
+    </script>
+</body>
+</html>
